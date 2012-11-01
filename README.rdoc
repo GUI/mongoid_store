@@ -1,0 +1,39 @@
+= MongoidStore
+
+ActiveSupport Mongoid 3 Cache store.
+
+== Supports
+
+* Mongoid 3+
+* Ruby 1.9.2+
+* ActiveSupport 3+
+
+== Installation and Usage
+
+    gem install mongoid_store
+
+    require 'mongoid_store'
+
+    store = MongoidStore.new
+    store.write('abc', 123)
+    pp store.read('abc')
+
+    pp store.read('def')
+    pp store.fetch('def') { 456 }
+    pp store.read('def')
+
+Using MongoidStore with rails is as easy as:
+
+    config.cache_store = :mongoid_store
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
+* Commit, do not mess with rakefile, version, or history. (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2012 Andre Meij. See LICENSE for details.
