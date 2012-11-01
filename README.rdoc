@@ -1,6 +1,6 @@
 = MongoidStore
 
-ActiveSupport Mongoid 3 Cache store.
+ActiveSupport Mongoid 3 Cache store, loosly  based on Bin by John Nunemaker
 
 == Supports
 
