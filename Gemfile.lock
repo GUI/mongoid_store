@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mongoid_store (0.0.1)
+    mongoid_store (0.1.0)
       activesupport (~> 3.2)
       mongoid (~> 3.0)
 
