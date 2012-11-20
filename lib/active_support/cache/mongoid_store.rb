@@ -29,7 +29,7 @@ module ActiveSupport
       protected
 
       def write_entry(key, entry, options)
-        collection.find(_id: key).upsert(_id: key, value: entry.raw_value, expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
+        collection.find(_id: key).upsert(_id: key, value: entry.value, expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
       end
 
       def read_entry(key, options = nil)

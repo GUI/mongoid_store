@@ -2,6 +2,10 @@
 
 ActiveSupport Mongoid 3 Cache store, loosly  based on Bin by John Nunemaker
 
+== Complex data types
+
+MongoidStore tries to store the values you put in directly into MongoDB using Moped. When experiencing trouble you may have to do your own serialization and deserialization.
+
 == Supports
 
 * Mongoid 3+
