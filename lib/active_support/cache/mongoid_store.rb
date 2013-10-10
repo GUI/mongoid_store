@@ -44,7 +44,7 @@ module ActiveSupport
       private
 
       def binary_for(value)
-        Moped::BSON::Binary.new(:generic, value)
+        Moped::BSON::Binary.new(:generic, value.to_s.force_encoding('binary'))
       end
 
       def value_for(binary)
