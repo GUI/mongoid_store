@@ -29,16 +29,12 @@ module ActiveSupport
       protected
 
       def write_entry(key, entry, options)
-        collection.find(_id: key).upsert(_id: key, value: serialize(entry.value), expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
+        collection.find(_id: key).upsert(_id: key, value: binary_for(entry.value), expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
       end
 
       def read_entry(key, options = nil)
         document = collection.find(_id: key, expires_at: {'$gt' => Time.now.utc.to_i}).first
-        if document
-          value = deserialize(document['value'])
-          created_at = document['created_at']
-          ActiveSupport::Cache::Entry.create(value, created_at)
-        end
+        ActiveSupport::Cache::Entry.create(value_for(value), document['created_at']) if document
       end
 
       def delete_entry(key, options = nil)
@@ -47,14 +43,12 @@ module ActiveSupport
 
       private
 
-      def serialize(object)
-        string = Marshal.dump(object)
-        binary = Moped::BSON::Binary.new(:generic, string)
+      def binary_for(value)
+        Moped::BSON::Binary.new(:generic, value)
       end
 
-      def deserialize(binary)
-        string = binary.to_s
-        object = Marshal.load(string)
+      def value_for(binary)
+        binary.to_s
       end
 
       def collection
