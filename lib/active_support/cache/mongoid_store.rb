@@ -29,12 +29,16 @@ module ActiveSupport
       protected
 
       def write_entry(key, entry, options)
-        collection.find(_id: key).upsert(_id: key, value: entry.value, expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
+        collection.find(_id: key).upsert(_id: key, value: serialize(entry.value), expires_at: entry.expires_at.to_i, created_at: Time.now.utc.to_i)
       end
 
       def read_entry(key, options = nil)
         document = collection.find(_id: key, expires_at: {'$gt' => Time.now.utc.to_i}).first
-        ActiveSupport::Cache::Entry.create(document['value'], document['created_at']) if document
+        if document
+          value = deserialize(document['value'])
+          created_at = document['created_at'])
+          ActiveSupport::Cache::Entry.create(value, created_at)
+        end
       end
 
       def delete_entry(key, options = nil)
@@ -42,6 +46,16 @@ module ActiveSupport
       end
 
       private
+
+      def serialize(object)
+        string = Marshal.dump(object)
+        binary = Moped::BSON::Binary.new(:generic, string)
+      end
+
+      def deserialize(binary)
+        string = binary.to_s
+        object = Marshal.load(string)
+      end
 
       def collection
         Mongoid.session(:default)[collection_name]
