@@ -34,7 +34,7 @@ module ActiveSupport
 
       def read_entry(key, options = nil)
         document = collection.find(_id: key, expires_at: {'$gt' => Time.now.utc.to_i}).first
-        ActiveSupport::Cache::Entry.create(value_for(value), document['created_at']) if document
+        ActiveSupport::Cache::Entry.create(value_for(document['value']), document['created_at']) if document
       end
 
       def delete_entry(key, options = nil)
