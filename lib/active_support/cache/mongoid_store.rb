@@ -36,7 +36,7 @@ module ActiveSupport
         document = collection.find(_id: key, expires_at: {'$gt' => Time.now.utc.to_i}).first
         if document
           value = deserialize(document['value'])
-          created_at = document['created_at'])
+          created_at = document['created_at']
           ActiveSupport::Cache::Entry.create(value, created_at)
         end
       end
