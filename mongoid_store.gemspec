@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.summary      = 'ActiveSupport Mongoid 3 Cache store.'
   s.description  = 'ActiveSupport Mongoid 3 Cache store.'
 
-  s.add_dependency 'mongoid',       '~> 3.0'
-  s.add_dependency 'activesupport', '~> 3.2'
+  s.add_dependency 'mongoid',       '> 3.0'
+  s.add_dependency 'activesupport', '> 3.0'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
