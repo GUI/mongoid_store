@@ -1,7 +1,7 @@
 require 'helper'
 
 describe ActiveSupport::Cache::MongoidStore do
-  let(:collection)  { Mongoid.session(:default)[:cache] }
+  let(:collection)  { Mongoid.session(:default)[:rails_cache] }
   let(:store)       { ActiveSupport::Cache::MongoidStore.new }
 
   describe "#write" do
@@ -105,16 +105,16 @@ describe ActiveSupport::Cache::MongoidStore do
     end
 
     it "returns true if key found" do
-      store.exist?('foo').should be_true
+      store.exist?('foo').should == true
     end
 
     it "returns false if key not found" do
-      store.exist?('not:found:key').should be_false
+      store.exist?('not:found:key').should == false
     end
 
     it "works with symbol" do
-      store.exist?(:foo).should be_true
-      store.exist?(:notfoundkey).should be_false
+      store.exist?(:foo).should == true
+      store.exist?(:notfoundkey).should == false
     end
   end
 

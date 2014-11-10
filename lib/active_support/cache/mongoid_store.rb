@@ -41,8 +41,12 @@ module ActiveSupport
         doc        = collection.find(_id: key, expires_at: {'$gt' => expires_at}).first
 
         if doc
-          data = doc['data'].to_s
-          value = Marshal.load(data)
+          if defined? Moped::BSON
+            data = doc['data'].to_s
+            value = Marshal.load(data)
+          else
+            value = doc['data'].data
+          end
           created_at = doc['created_at'].to_f
 
           Entry.for(value, created_at)
@@ -78,7 +82,11 @@ module ActiveSupport
             marshaled = entry.send('compressed?') ? v : entry.send('compress', v)
           end
 
-          Moped::BSON::Binary.new(:generic, marshaled.force_encoding('binary'))
+          if defined? Moped::BSON
+            Moped::BSON::Binary.new(:generic, marshaled.force_encoding('binary'))
+          else
+            BSON::Binary.new(marshaled.force_encoding('binary'), :generic)
+          end
         end
 
       # the intializer for rails' default Entry class will go ahead and
