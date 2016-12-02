@@ -123,8 +123,8 @@ module ActiveSupport
 
       private
 
-      def collection
-        Mongoid.session(:default)[collection_name]
+      def collection 
+        Mongoid.client(:default)[collection_name]
       end
     end
   end
