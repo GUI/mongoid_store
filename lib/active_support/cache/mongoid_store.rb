@@ -33,7 +33,7 @@ module ActiveSupport
         expires_at = entry.expires_at.to_i
         created_at = Time.now.utc.to_i
 
-        collection.find(_id: key).upsert(_id: key, data: data, expires_at: expires_at, created_at: created_at)
+        collection.replace_one( { _id: key } , { _id: key, data: data, expires_at: expires_at, created_at: created_at}, upsert:true )
       end
 
       def read_entry(key, options = {})
@@ -45,7 +45,7 @@ module ActiveSupport
             data = doc['data'].to_s
             value = Marshal.load(data)
           else
-            value = doc['data'].data
+            value = Marshal.load(doc['data'].data)
           end
           created_at = doc['created_at'].to_f
 
@@ -83,9 +83,11 @@ module ActiveSupport
           end
 
           if defined? Moped::BSON
-            Moped::BSON::Binary.new(:generic, marshaled.force_encoding('binary'))
+            # binding.pry
+            Moped::BSON::Binary.new(:generic, Marshal.dump(marshaled))
           else
-            BSON::Binary.new(marshaled.force_encoding('binary'), :generic)
+            # binding.pry
+            BSON::Binary.new(Marshal.dump(marshaled), :generic) 
           end
         end
 
